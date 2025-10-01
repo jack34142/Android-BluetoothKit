@@ -1,5 +1,8 @@
 package com.inuker.bluetooth.library.utils;
 
+import static android.content.Context.RECEIVER_EXPORTED;
+
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -51,7 +54,22 @@ public class BluetoothUtils {
     }
 
     private static void registerGlobalReceiver(BroadcastReceiver receiver, IntentFilter filter) {
-        getContext().registerReceiver(receiver, filter);
+//        try {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                    getContext().registerReceiver(receiver, filter, RECEIVER_EXPORTED);
+//                } else getContext().registerReceiver(receiver, filter);
+//            } else getContext().registerReceiver(receiver, filter);
+//        } catch (Exception e) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+//                getContext().registerReceiver(receiver, filter, RECEIVER_EXPORTED);
+//            else getContext().registerReceiver(receiver, filter);
+//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getContext().registerReceiver(receiver, filter, android.content.Context.RECEIVER_EXPORTED);
+        }else {
+            getContext().registerReceiver(receiver, filter);
+        }
     }
 
     public static void unregisterReceiver(BroadcastReceiver receiver) {
