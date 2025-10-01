@@ -1,6 +1,7 @@
 package com.inuker.bluetooth.library;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.inuker.bluetooth.library.connect.listener.BleConnectStatusListener;
 import com.inuker.bluetooth.library.connect.options.BleConnectOptions;
@@ -43,8 +44,18 @@ public class BluetoothClient implements IBluetoothClient {
     @Override
     public void connect(String mac, BleConnectOptions options, BleConnectResponse response) {
         BluetoothLog.v(String.format("connect %s", mac));
-        response = ProxyUtils.getUIProxy(response);
-        mClient.connect(mac, options, response);
+        try{
+            response = ProxyUtils.getUIProxy(response);
+        } catch (Exception e) {
+            Log.e("@@@@", "A");
+            throw new RuntimeException(e);
+        }
+        try{
+            mClient.connect(mac, options, response);
+        } catch (Exception e) {
+            Log.e("@@@@", "B");
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
